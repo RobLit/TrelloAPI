@@ -5,16 +5,14 @@ def create():
 
     url = "https://api.trello.com/1/boards/"
     data = {
-        'key': keys.trello.key,
-        'token': keys.trello.token,
         'name': 'new_board'
     }
 
-    response = requests.post(url, params=data)
+    response = requests.post(url, data=data, params=keys.trello.data)
     data = response.json()
     board_id = data['id']
 
-    with open("E:/PythonProjects/TrelloAPI/request/board_id.txt", "w") as file:
+    with open(keys.trello.path, "w") as file:
         file.write(board_id)
     assert response.status_code == 200
     #print(response.text)

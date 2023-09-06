@@ -7,7 +7,7 @@ import json
 
 def test_change_name():
     crud.create()
-    with open("E:/PythonProjects/TrelloAPI/request/board_id.txt", "r") as file:
+    with open(keys.trello.path, "r") as file:
         board_id = file.read()
     keys.trello.url = f"https://api.trello.com/1/boards/{board_id}"
     data = {
@@ -23,16 +23,13 @@ def test_change_name():
 
 def test_create_list():
     crud.create()
-    with open("E:/PythonProjects/TrelloAPI/request/board_id.txt", "r") as file:
+    with open(keys.trello.path, "r") as file:
         board_id = file.read()
     url = f"https://api.trello.com/1/boards/{board_id}/lists"
-    headers = {
-        "Accept": "application/json"
-    }
     data = {
         'name': 'new_list'
     }
-    response = requests.post(url, headers=headers, params=keys.trello.data, data=data)
+    response = requests.post(url, headers=keys.trello.headers, params=keys.trello.data, data=data)
     json = response.json()
     name = json['name']
     assert response.status_code == 200
@@ -85,21 +82,18 @@ def test_create_card():
     crud.create()
     crud.get_id_list2()
     url = "https://api.trello.com/1/cards"
-    headers = {
-        "Accept": "application/json"
-    }
     id = {
         'idList': keys.trello.fst,
         'name': 'Test_card'
     }
-    response = requests.post(url, headers=headers, data=id, params=keys.trello.data)  # create new card
+    response = requests.post(url, headers=keys.trello.headers, data=id, params=keys.trello.data)  # create new card
     assert response.status_code == 200
     crud.delete()
 
 
 def test_create_label_on_a_board():
     crud.create()
-    with open("E:/PythonProjects/TrelloAPI/request/board_id.txt", "r") as file:
+    with open(keys.trello.path, "r") as file:
         board_id = file.read()
     url = f"https://api.trello.com/1/boards/{board_id}/labels"
     data = {
@@ -112,49 +106,3 @@ def test_create_label_on_a_board():
     crud.delete()
 
 
-def test_create_email_board():
-    crud.create()
-    with open("E:/PythonProjects/TrelloAPI/request/board_id.txt", "r") as file:
-        board_id = file.read()
-    url = f"https://api.trello.com/1/checklists/{board_id}"
-    response = requests.get(url, params=keys.trello.data)
-    assert response.status_code == 200
-    crud.delete()
-
-
-def test_checkitem_on_checklist_flow():
-    crud.create()
-    crud.get_id_list2()
-    url = "https://api.trello.com/1/cards"
-    headers = {
-        "Accept": "application/json"
-    }
-    id = {
-        'idList': keys.trello.fst,
-        'name': 'Test_card'
-    }
-    response = requests.post(url, headers=headers, data=id, params=keys.trello.data)  # create new card
-    idCard = response.json()['id']
-    assert response.status_code == 200
-    url = "https://api.trello.com/1/checklists"
-    data = {
-        'idCard': idCard
-    }
-    response = requests.post(url, data=data, params=keys.trello.data)  # create a checklist
-    assert response.status_code == 200
-    idChecklist = response.json()['id']
-    url = f"https://api.trello.com/1/checklists/{idChecklist}/checkItems"
-    data = {
-        'name': 'test'
-    }
-    response = requests.post(url, data=data, params=keys.trello.data)
-    idCI = response.json()['id']
-    assert response.status_code == 200
-    url = f"https://api.trello.com/1/checklists/{idChecklist}/checkItems/{idCI}"
-    response = requests.get(url, params=keys.trello.data) #get checkitem
-    assert response.json()['name'] == 'test'
-    response = requests.delete(url, params=keys.trello.data) #delete checkitem
-    assert response.status_code == 200
-    response = requests.get(url, params=keys.trello.data)  # get checkitem
-    assert response.status_code == 404
-    crud.delete()

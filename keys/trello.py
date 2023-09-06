@@ -1,5 +1,7 @@
-key = 'yourAPIKey'
-token = 'yourToken'
+key = '1f3181b7431debbb306838d1df03f924'
+token = 'ATTA3248403af8f3f93207988df212dc158815bdde52c1723803092b2d9dc5774f27276D859F'
+
+path = 'E:/PythonProjects/TrelloAPI/request/board_id.txt'
 
 data = {
   'key': key,
@@ -10,14 +12,12 @@ headers = {
   "Accept": "application/json"
 }
 
-with open("E:/PythonProjects/TrelloAPI/request/board_id.txt", "r") as file:
+with open(path, "r") as file:
   board_id = file.read()
 
 url = f"https://api.trello.com/1/boards/{board_id}"
 
-id = '64ecb8da3588ab75ec30cdb4'
-
-#id_value = None
+id_value = None
 fst = None
 snd = None
 trd = None

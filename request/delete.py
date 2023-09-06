@@ -3,7 +3,7 @@ import keys.trello
 
 def delete():
 
-    with open("E:/PythonProjects/TrelloAPI/request/board_id.txt", "r") as file:
+    with open(keys.trello.path, "r") as file:
         board_id = file.read()
 
     url = f"https://api.trello.com/1/boards/{board_id}"
