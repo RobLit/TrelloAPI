@@ -12,12 +12,6 @@ headers = {
   "Accept": "application/json"
 }
 
-with open(path, "r") as file:
-  board_id = file.read()
-
-url = f"https://api.trello.com/1/boards/{board_id}"
-
-id_value = None
 fst = None
 snd = None
 trd = None
